@@ -2,8 +2,6 @@
 
 **Small projects. Side quests. Questionable priorities.**
 
-![The Side-bits homepage](docs/images/home.png)
-
 ## The idea
 
 Side-bits is a little corner of the internet for things that didn't need to exist.

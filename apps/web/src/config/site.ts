@@ -17,4 +17,5 @@ export const siteConfig = {
   description:
     "A little corner of the internet for things that didn't need to exist: useful tools, odd experiments and tiny websites made because someone asked “what if?”",
   url: new URL(process.env.SITE_URL || DEVELOPMENT_URL),
+  author: { name: "Anmol Jha", url: "https://anmol1616jha.com/" },
 } as const;
