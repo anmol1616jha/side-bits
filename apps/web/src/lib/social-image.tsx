@@ -5,15 +5,16 @@ import { socialImageSize } from "@/lib/social-image-size";
 export { socialImageSize };
 export const socialImageContentType = "image/png";
 
-// Light-theme brand tokens (packages/ui/src/styles/index.css). Images can't read CSS variables.
+// Dark-theme brand tokens (packages/ui/src/styles/index.css). Images can't read CSS variables.
+// The logo's middle square uses `bg` so it matches app/icon.svg.
 const colors = {
-  bg: "#f5f1e8",
-  surface: "#fffcf6",
-  text: "#20211f",
-  muted: "#55564f",
-  accent: "#b83f25",
-  yellow: "#e9c75a",
-  border: "#c8c0b3",
+  bg: "#070b12",
+  surface: "#070b12",
+  text: "#e4eefa",
+  muted: "#93a6bf",
+  accent: "#4de1ff",
+  yellow: "#ffb547",
+  border: "#2a3f59",
 };
 
 interface SocialImageProps {

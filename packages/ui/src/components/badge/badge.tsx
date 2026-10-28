@@ -20,7 +20,7 @@ export function Badge({ children, tone = "neutral", icon, className }: BadgeProp
   return (
     <span
       className={cx(
-        "inline-flex items-center gap-1 rounded-sm border px-2 py-0.5 text-meta font-medium",
+        "inline-flex items-center gap-1 rounded-sm border px-2 py-0.5 font-mono text-meta font-medium uppercase tracking-wider",
         tones[tone],
         className,
       )}

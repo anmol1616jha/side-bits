@@ -55,8 +55,8 @@ export function ProjectCard({
   return (
     <article
       className={cx(
-        "group relative flex h-full flex-col overflow-hidden rounded-md border border-border bg-surface",
-        "transition-colors duration-(--motion-base) hover:border-text-muted",
+        "group hud-frame flex h-full flex-col overflow-hidden rounded-md border border-border bg-surface/80 backdrop-blur-sm",
+        "transition-[border-color,box-shadow] duration-(--motion-base) hover:border-accent/60 hover:shadow-[0_0_32px_-12px_var(--color-accent)]",
         "has-[a:focus-visible]:outline-2 has-[a:focus-visible]:outline-offset-2 has-[a:focus-visible]:outline-focus",
         className,
       )}
@@ -81,7 +81,7 @@ export function ProjectCard({
               {visibleTags.map((tag) => (
                 <li
                   key={tag}
-                  className="rounded-sm bg-surface-muted px-2 py-0.5 text-meta text-text-muted"
+                  className="rounded-sm bg-surface-muted px-2 py-0.5 font-mono text-meta text-text-muted"
                 >
                   {tag}
                 </li>
@@ -92,7 +92,7 @@ export function ProjectCard({
           )}
           <span
             aria-hidden="true"
-            className="inline-flex items-center gap-1 text-sm font-medium text-accent"
+            className="inline-flex items-center gap-1 font-mono text-meta font-medium tracking-widest text-accent uppercase"
           >
             Open
             <ArrowRight

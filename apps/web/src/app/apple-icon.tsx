@@ -12,7 +12,7 @@ export default function AppleIcon() {
         height: "100%",
         display: "flex",
         position: "relative",
-        backgroundColor: "#b83f25",
+        backgroundColor: "#4de1ff",
       }}
     >
       <div
@@ -23,7 +23,7 @@ export default function AppleIcon() {
           width: 62,
           height: 62,
           borderRadius: 14,
-          backgroundColor: "#f5f1e8",
+          backgroundColor: "#070b12",
         }}
       />
       <div
@@ -34,7 +34,7 @@ export default function AppleIcon() {
           width: 51,
           height: 51,
           borderRadius: 11,
-          backgroundColor: "#e9c75a",
+          backgroundColor: "#ffb547",
         }}
       />
     </div>,
