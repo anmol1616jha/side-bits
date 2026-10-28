@@ -1,0 +1,5 @@
+@import "tailwindcss";
+@import "@side-bits/ui/styles.css";
+
+/* Sidequest packages style themselves with the shared utilities. */
+@source "../../../../packages/sidequests";

@@ -1,0 +1,8 @@
+packages:
+  - apps/*
+  - packages/*
+  - packages/sidequests/*
+
+# unrs-resolver ships prebuilt binaries; its postinstall fallback is not needed.
+allowBuilds:
+  unrs-resolver: false

@@ -1,0 +1,1 @@
+export { TinyTextLabApp } from "./TinyTextLabApp";

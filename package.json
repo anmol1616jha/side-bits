@@ -1,0 +1,27 @@
+{
+  "name": "side-bits",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@12.15.0",
+  "engines": {
+    "node": ">=22.18.0"
+  },
+  "scripts": {
+    "dev": "pnpm --filter @side-bits/web dev",
+    "build": "pnpm --filter @side-bits/web build",
+    "start": "pnpm --filter @side-bits/web start",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit -p tsconfig.json && pnpm --recursive typecheck",
+    "test": "pnpm --recursive --if-present test",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "validate:projects": "node --disable-warning=ExperimentalWarning scripts/validate-project-registry.ts"
+  },
+  "devDependencies": {
+    "@side-bits/config": "workspace:*",
+    "@types/node": "22.20.5",
+    "eslint": "9.39.5",
+    "prettier": "3.9.10",
+    "typescript": "6.0.3"
+  }
+}

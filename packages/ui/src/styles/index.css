@@ -1,0 +1,122 @@
+/*
+ * Shared design tokens and base styles for Side-bits.
+ *
+ * Consumers import Tailwind first, then this file:
+ *   @import "tailwindcss";
+ *   @import "@side-bits/ui/styles.css";
+ *
+ * Colors are semantic only. The default Tailwind palette is removed so
+ * components cannot reach for raw hex-backed utilities like `bg-red-500`.
+ */
+
+/* Let Tailwind find class names used inside this package's components. */
+@source "..";
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+@theme {
+  --color-*: initial;
+  --color-bg: #f5f1e8;
+  --color-surface: #fffcf6;
+  --color-surface-muted: #eae4d8;
+  --color-text: #20211f;
+  --color-text-muted: #55564f;
+  --color-border: #c8c0b3;
+  --color-accent: #b83f25;
+  --color-accent-contrast: #ffffff;
+  --color-green: #355c43;
+  --color-green-soft: #dce8d7;
+  --color-yellow: #e9c75a;
+  --color-yellow-contrast: #20211f;
+  --color-focus: #1f65a6;
+  --color-danger: #b42318;
+  --color-warning: #8a5a00;
+  --color-success: #28613b;
+
+  /* Font families come from next/font (or a standalone adapter) via these variables. */
+  --font-sans: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-heading), var(--font-body), ui-sans-serif, system-ui, sans-serif;
+
+  /* Smallest text size allowed for metadata (13px). */
+  --text-meta: 0.8125rem;
+  --text-meta--line-height: 1.25rem;
+
+  --text-display-xl: clamp(2.25rem, 1.6rem + 3vw, 4rem);
+  --text-display-xl--line-height: 1.05;
+  --text-display-lg: clamp(1.75rem, 1.4rem + 1.6vw, 2.5rem);
+  --text-display-lg--line-height: 1.15;
+  --text-display-md: clamp(1.375rem, 1.2rem + 0.8vw, 1.75rem);
+  --text-display-md--line-height: 1.2;
+
+  --radius-*: initial;
+  --radius-sm: 0.5rem;
+  --radius-md: 0.875rem;
+  --radius-lg: 1.25rem;
+
+  --container-content: 80rem;
+  --container-reading: 46rem;
+}
+
+@layer base {
+  :root {
+    color-scheme: light;
+    --motion-fast: 120ms;
+    --motion-base: 180ms;
+    --motion-slow: 220ms;
+  }
+
+  [data-theme="dark"] {
+    color-scheme: dark;
+    --color-bg: #191a18;
+    --color-surface: #232522;
+    --color-surface-muted: #2e312c;
+    --color-text: #f5f1e8;
+    --color-text-muted: #c2c4bb;
+    --color-border: #4b4f47;
+    --color-accent: #f08a6c;
+    --color-accent-contrast: #251711;
+    --color-green: #a6c6a7;
+    --color-green-soft: #2b3a2e;
+    --color-yellow: #e9c75a;
+    --color-yellow-contrast: #20211f;
+    --color-focus: #8cc7ff;
+    --color-danger: #ff8d86;
+    --color-warning: #f2c46b;
+    --color-success: #a6d5a6;
+  }
+
+  html {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    min-height: 100dvh;
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background-color: var(--color-yellow);
+    color: var(--color-yellow-contrast);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{
+  // Relative imports in this package keep their .ts extension so Node can run it
+  // directly (type stripping) from scripts/validate-project-registry.ts.
+  "extends": "@side-bits/config/typescript/base.json",
+  "include": ["src"]
+}
