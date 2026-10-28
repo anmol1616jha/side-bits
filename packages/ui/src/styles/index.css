@@ -16,22 +16,26 @@
 
 @theme {
   --color-*: initial;
-  --color-bg: #edf2f7;
-  --color-surface: #f8fbfd;
-  --color-surface-muted: #dde6ef;
-  --color-text: #0a1628;
-  --color-text-muted: #45566d;
-  --color-border: #a7b9cd;
-  --color-accent: #00648b;
-  --color-accent-contrast: #ffffff;
-  --color-green: #0b6b4a;
-  --color-green-soft: #d3efe4;
+  /*
+   * Each color is light-dark(light, dark). Which one applies follows
+   * `color-scheme`, which the base layer sets from data-theme.
+   */
+  --color-bg: light-dark(#edf2f7, #070b12);
+  --color-surface: light-dark(#f8fbfd, #0d1520);
+  --color-surface-muted: light-dark(#dde6ef, #14202f);
+  --color-text: light-dark(#0a1628, #e4eefa);
+  --color-text-muted: light-dark(#45566d, #93a6bf);
+  --color-border: light-dark(#a7b9cd, #2a3f59);
+  --color-accent: light-dark(#00648b, #4de1ff);
+  --color-accent-contrast: light-dark(#ffffff, #03131b);
+  --color-green: light-dark(#0b6b4a, #5cf2a6);
+  --color-green-soft: light-dark(#d3efe4, #0e2a22);
   --color-yellow: #ffb547;
   --color-yellow-contrast: #1a1206;
-  --color-focus: #b8128f;
-  --color-danger: #c01b3a;
-  --color-warning: #8a5300;
-  --color-success: #0f6b42;
+  --color-focus: light-dark(#b8128f, #ff5cd6);
+  --color-danger: light-dark(#c01b3a, #ff7088);
+  --color-warning: light-dark(#8a5300, #ffb547);
+  --color-success: light-dark(#0f6b42, #5cf2a6);
 
   /* Font families come from next/font (or a standalone adapter) via these variables. */
   --font-sans: var(--font-body), ui-sans-serif, system-ui, sans-serif;
@@ -76,48 +80,17 @@
 
   [data-theme="dark"] {
     color-scheme: dark;
-    --color-bg: #070b12;
-    --color-surface: #0d1520;
-    --color-surface-muted: #14202f;
-    --color-text: #e4eefa;
-    --color-text-muted: #93a6bf;
-    --color-border: #2a3f59;
-    --color-accent: #4de1ff;
-    --color-accent-contrast: #03131b;
-    --color-green: #5cf2a6;
-    --color-green-soft: #0e2a22;
-    --color-yellow: #ffb547;
-    --color-yellow-contrast: #1a1206;
-    --color-focus: #ff5cd6;
-    --color-danger: #ff7088;
-    --color-warning: #ffb547;
-    --color-success: #5cf2a6;
   }
 
-  /* Without JavaScript the theme script never runs, so follow the system setting. Keep in sync with the block above. */
+  /* Without JavaScript the theme script never runs, so follow the system setting. */
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme]) {
       color-scheme: dark;
-      --color-bg: #070b12;
-      --color-surface: #0d1520;
-      --color-surface-muted: #14202f;
-      --color-text: #e4eefa;
-      --color-text-muted: #93a6bf;
-      --color-border: #2a3f59;
-      --color-accent: #4de1ff;
-      --color-accent-contrast: #03131b;
-      --color-green: #5cf2a6;
-      --color-green-soft: #0e2a22;
-      --color-yellow: #ffb547;
-      --color-yellow-contrast: #1a1206;
-      --color-focus: #ff5cd6;
-      --color-danger: #ff7088;
-      --color-warning: #ffb547;
-      --color-success: #5cf2a6;
     }
   }
 
   html {
+    --grid-line: color-mix(in oklab, var(--color-border) 15%, transparent);
     background-color: var(--color-bg);
     /* A faint glow at the top and a blueprint grid behind everything. */
     background-image:
@@ -126,12 +99,8 @@
         color-mix(in oklab, var(--color-accent) 14%, transparent),
         transparent 70%
       ),
-      linear-gradient(color-mix(in oklab, var(--color-border) 15%, transparent) 1px, transparent 1px),
-      linear-gradient(
-        90deg,
-        color-mix(in oklab, var(--color-border) 15%, transparent) 1px,
-        transparent 1px
-      );
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
     background-size:
       100% 100%,
       2rem 2rem,
@@ -163,7 +132,6 @@
     .animate-blink {
       animation: none !important;
     }
-
 
     *,
     ::before,
@@ -218,4 +186,12 @@
     width: 1.75rem;
     height: 1.75rem;
   }
+}
+
+/* Small uppercase monospace text for labels, eyebrows, and controls. Size is left to the caller. */
+@utility hud-label {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }

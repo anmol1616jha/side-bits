@@ -5,7 +5,7 @@ export type ButtonVariant = "primary" | "secondary" | "ghost";
 export type ButtonSize = "sm" | "md";
 
 const base =
-  "inline-flex items-center justify-center gap-2 rounded-sm border font-mono font-medium uppercase tracking-wider whitespace-nowrap " +
+  "inline-flex items-center justify-center gap-2 rounded-sm border hud-label whitespace-nowrap " +
   "transition-[color,background-color,border-color,box-shadow] duration-(--motion-fast) disabled:cursor-not-allowed disabled:opacity-55";
 
 const variants: Record<ButtonVariant, string> = {

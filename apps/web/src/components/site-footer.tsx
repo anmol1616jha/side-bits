@@ -19,7 +19,7 @@ export function SiteFooter() {
         </div>
       </Container>
       <div className="border-t border-border">
-        <Container className="flex flex-wrap items-center justify-between gap-x-6 py-2 font-mono text-meta tracking-wider text-text-muted uppercase">
+        <Container className="flex flex-wrap items-center justify-between gap-x-6 py-2 hud-label text-meta text-text-muted">
           <p className="flex items-center gap-2">
             <Settings aria-hidden="true" className="size-4" strokeWidth={2} />
             <span aria-hidden="true">&amp;</span>

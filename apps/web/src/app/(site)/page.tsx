@@ -40,7 +40,7 @@ export default function HomePage() {
     <>
       <Container className="grid items-center gap-12 py-12 sm:py-20 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]">
         <div>
-          <p className="mb-4 font-mono text-meta font-medium tracking-widest text-accent uppercase">
+          <p className="mb-4 hud-label text-meta text-accent">
             <span aria-hidden="true">{"// "}</span>
             Small projects. Side quests. Questionable priorities.
           </p>
@@ -85,7 +85,7 @@ export default function HomePage() {
             action={
               <Link
                 href="/explore"
-                className="inline-flex min-h-11 items-center gap-1 font-mono text-sm font-medium tracking-wider text-accent uppercase underline-offset-4 hover:underline"
+                className="inline-flex min-h-11 items-center gap-1 hud-label text-sm text-accent underline-offset-4 hover:underline"
               >
                 See everything
                 <ArrowRight aria-hidden="true" className="size-4" strokeWidth={2} />
