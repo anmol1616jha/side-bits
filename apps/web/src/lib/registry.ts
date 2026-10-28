@@ -3,6 +3,8 @@ import { validateRegistry } from "@side-bits/project-contract";
 import type { ProjectMetadata } from "@side-bits/project-contract";
 import jsonFixer from "@side-bits/sidequest-json-fixer/project.config";
 import { JsonFixerPreview } from "@side-bits/sidequest-json-fixer/preview";
+import randomTopicGenerator from "@side-bits/sidequest-random-topic-generator/project.config";
+import { RandomTopicGeneratorPreview } from "@side-bits/sidequest-random-topic-generator/preview";
 import tinyTextLab from "@side-bits/sidequest-tiny-text-lab/project.config";
 import { TinyTextLabPreview } from "@side-bits/sidequest-tiny-text-lab/preview";
 import { collections } from "@/content/collections";
@@ -30,6 +32,10 @@ const entries: RegistryEntry[] = [
   {
     metadata: tinyTextLab,
     Preview: TinyTextLabPreview,
+  },
+  {
+    metadata: randomTopicGenerator,
+    Preview: RandomTopicGeneratorPreview,
   },
 ];
 

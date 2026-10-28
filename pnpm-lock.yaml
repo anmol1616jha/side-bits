@@ -190,6 +190,9 @@ importers:
       '@side-bits/sidequest-json-fixer':
         specifier: workspace:*
         version: link:../../packages/sidequests/json-fixer
+      '@side-bits/sidequest-random-topic-generator':
+        specifier: workspace:*
+        version: link:../../packages/sidequests/random-topic-generator
       '@side-bits/sidequest-tiny-text-lab':
         specifier: workspace:*
         version: link:../../packages/sidequests/tiny-text-lab
@@ -277,6 +280,49 @@ importers:
         version: 5.0.5(@types/node@22.20.5)(jsdom@30.1.3)(vite@8.3.5(@types/node@22.20.5)(jiti@2.7.0))
 
   packages/sidequests/json-fixer:
+    dependencies:
+      '@side-bits/project-contract':
+        specifier: workspace:*
+        version: link:../../project-contract
+      '@side-bits/ui':
+        specifier: workspace:*
+        version: link:../../ui
+      lucide-react:
+        specifier: 1.61.0
+        version: 1.61.0(@types/react@19.3.0)(react@19.3.1)
+    devDependencies:
+      '@side-bits/config':
+        specifier: workspace:*
+        version: link:../../config
+      '@testing-library/dom':
+        specifier: 10.4.2
+        version: 10.4.2
+      '@testing-library/react':
+        specifier: 16.3.3
+        version: 16.3.3(@testing-library/dom@10.4.2)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
+      '@types/react':
+        specifier: 19.3.0
+        version: 19.3.0
+      '@types/react-dom':
+        specifier: 19.3.0
+        version: 19.3.0(@types/react@19.3.0)
+      jsdom:
+        specifier: 30.1.3
+        version: 30.1.3
+      react:
+        specifier: 19.3.1
+        version: 19.3.1
+      react-dom:
+        specifier: 19.3.1
+        version: 19.3.1(react@19.3.1)
+      typescript:
+        specifier: 6.0.3
+        version: 6.0.3
+      vitest:
+        specifier: 5.0.5
+        version: 5.0.5(@types/node@22.20.5)(jsdom@30.1.3)(vite@8.3.5(@types/node@22.20.5)(jiti@2.7.0))
+
+  packages/sidequests/random-topic-generator:
     dependencies:
       '@side-bits/project-contract':
         specifier: workspace:*

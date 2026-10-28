@@ -1,0 +1,1 @@
+export { RandomTopicGeneratorApp } from "./RandomTopicGeneratorApp";

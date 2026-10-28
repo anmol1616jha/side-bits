@@ -1,0 +1,4 @@
+{
+  "extends": "@side-bits/config/typescript/base.json",
+  "include": ["src", "project.config.ts", "vitest.config.ts"]
+}

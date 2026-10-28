@@ -8,4 +8,9 @@ export const collections: CollectionDefinition[] = [
     title: "Actually useful",
     description: "Small tools that do one job and get out of the way.",
   },
+  {
+    slug: "brain-gym",
+    title: "Brain gym",
+    description: "Little workouts for thinking, remembering and talking on your feet.",
+  },
 ];

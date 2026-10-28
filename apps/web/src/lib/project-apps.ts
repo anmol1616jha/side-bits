@@ -12,6 +12,8 @@ import type { ComponentType } from "react";
  */
 export const projectAppLoaders: Record<string, () => Promise<ComponentType>> = {
   "json-fixer": () => import("@side-bits/sidequest-json-fixer").then((m) => m.JsonFixerApp),
+  "random-topic-generator": () =>
+    import("@side-bits/sidequest-random-topic-generator").then((m) => m.RandomTopicGeneratorApp),
   "tiny-text-lab": () => import("@side-bits/sidequest-tiny-text-lab").then((m) => m.TinyTextLabApp),
 };
 

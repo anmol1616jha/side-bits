@@ -12,6 +12,7 @@
   "dependencies": {
     "@side-bits/project-contract": "workspace:*",
     "@side-bits/sidequest-json-fixer": "workspace:*",
+    "@side-bits/sidequest-random-topic-generator": "workspace:*",
     "@side-bits/sidequest-tiny-text-lab": "workspace:*",
     "@side-bits/ui": "workspace:*",
     "lucide-react": "1.61.0",
