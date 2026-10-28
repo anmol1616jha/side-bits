@@ -94,7 +94,7 @@ describe("ProjectDirectory", () => {
     renderDirectory();
     fireEvent.change(screen.getByRole("searchbox"), { target: { value: "nothing matches" } });
     expect(screen.getByRole("heading", { name: "Nothing here" })).toBeTruthy();
-    fireEvent.click(screen.getAllByRole("button", { name: "Clear filters" }).at(-1)!);
+    fireEvent.click(screen.getByRole("button", { name: "Clear filters" }));
     expect(visibleTitles()).toEqual(["JSON Fixer", "Tiny Text Lab"]);
   });
 
@@ -114,6 +114,29 @@ describe("ProjectDirectory", () => {
       vi.advanceTimersByTime(600);
     });
     expect(status.textContent).toBe("Showing 1 of 2 projects");
+    vi.useRealTimers();
+  });
+
+  it("announces a change even when the count text stays the same", () => {
+    vi.useFakeTimers();
+    renderDirectory();
+    const status = screen.getByRole("status");
+    const chip = screen.getByRole("button", { name: "Odd ones" });
+    fireEvent.click(chip);
+    act(() => {
+      vi.advanceTimersByTime(600);
+    });
+    fireEvent.click(chip);
+    act(() => {
+      vi.advanceTimersByTime(600);
+    });
+    expect(status.textContent).toBe("Showing all 2 projects");
+    fireEvent.click(screen.getByRole("button", { name: "Actually useful" }));
+    fireEvent.click(screen.getByRole("button", { name: "Actually useful" }));
+    act(() => {
+      vi.advanceTimersByTime(600);
+    });
+    expect(status.textContent).toBe("Showing all 2 projects\u00A0");
     vi.useRealTimers();
   });
 });

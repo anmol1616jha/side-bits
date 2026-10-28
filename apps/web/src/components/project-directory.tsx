@@ -73,21 +73,21 @@ export function ProjectDirectory({
   const summary = countLabel(results.length, projects.length);
 
   // Announce result counts only after the user changes something, and only once
-  // they pause, to avoid a screen reader reading every keystroke.
-  const debouncedSummary = useDebouncedValue(summary, ANNOUNCE_DELAY_MS);
+  // they pause, to avoid a screen reader reading every keystroke. Every change is
+  // announced, even when the count text is the same as last time.
   const hasInteracted = useRef(false);
   const [announcement, setAnnouncement] = useState("");
-  useEffect(() => {
-    if (hasInteracted.current) setAnnouncement(debouncedSummary);
-  }, [debouncedSummary]);
-
   const debouncedFilters = useDebouncedValue(filters, ANNOUNCE_DELAY_MS);
   useEffect(() => {
     if (!hasInteracted.current) return;
+    const resultCount = filterProjects(projects, debouncedFilters).length;
+    const message = countLabel(resultCount, projects.length);
+    // Identical text doesn't change the live region, so alternate a trailing no-break space.
+    setAnnouncement((previous) => (previous === message ? `${message}\u00A0` : message));
     trackEvent({
       name: "directory_filtered",
       properties: {
-        resultCount: filterProjects(projects, debouncedFilters).length,
+        resultCount,
         // Whether a search was made, never what was typed.
         hasQuery: debouncedFilters.query.trim() !== "",
         collection: debouncedFilters.collection,
@@ -163,7 +163,8 @@ export function ProjectDirectory({
 
         <div className="flex flex-wrap items-center gap-3">
           <p className="text-sm text-text-muted">{summary}</p>
-          {hasFilters ? (
+          {/* With no results, the empty state below has its own "Clear filters". */}
+          {hasFilters && results.length > 0 ? (
             <Button
               variant="ghost"
               size="sm"

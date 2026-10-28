@@ -45,8 +45,20 @@ function isWhitespace(char: string): boolean {
   return char === " " || char === "\t" || char === "\n" || char === "\r";
 }
 
+/** Characters that are invisible or look like a plain space but aren't valid JSON whitespace. */
+const INVISIBLE_NAMES: Record<string, string> = {
+  "\uFEFF": "an invisible byte order mark (U+FEFF)",
+  "\u00A0": "a non-breaking space (U+00A0)",
+  "\u200B": "an invisible zero-width space (U+200B)",
+};
+
 function describe(char: string): string {
   if (char === "\n") return "a line break";
+  const named = INVISIBLE_NAMES[char];
+  if (named) return named;
+  if (/\s/.test(char) || char.charCodeAt(0) < 0x20) {
+    return `an unusual space or control character (U+${char.charCodeAt(0).toString(16).toUpperCase().padStart(4, "0")})`;
+  }
   return `“${char}”`;
 }
 
@@ -264,15 +276,17 @@ function checkGrammar(text: string, tokens: Token[]): JsonSummary {
 
   if (tokens.length === 0) throw new JsonSyntaxError("There's no JSON here yet.", 0);
 
+  // Point just after the last real content, not at trailing blank lines.
+  const end = text.trimEnd().length;
   const unclosed = stack.at(-1);
   if (unclosed) {
     const opened = locate(text, unclosed.offset);
     throw new JsonSyntaxError(
       `Unexpected end of input: the ${unclosed.type} opened on line ${opened.line} is missing its closing “${CLOSERS[unclosed.type]}”.`,
-      text.length,
+      end,
     );
   }
-  if (expect !== "done") throw new JsonSyntaxError("Unexpected end of input.", text.length);
+  if (expect !== "done") throw new JsonSyntaxError("Unexpected end of input.", end);
 
   return { root: root!, size: rootSize, depth };
 }

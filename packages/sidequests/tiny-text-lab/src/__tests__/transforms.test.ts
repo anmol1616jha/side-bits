@@ -11,15 +11,28 @@ describe("case transforms", () => {
   });
 
   it("title case keeps small words lowercase except at the start", () => {
-    expect(run("title", "THE lord OF the rings")).toBe("The Lord of the Rings");
+    expect(run("title", "THE LORD OF THE RINGS")).toBe("The Lord of the Rings");
     expect(run("title", "don't stop\nof mice and men")).toBe("Don't Stop\nOf Mice and Men");
   });
 
+  it("title case keeps acronyms and names as written", () => {
+    expect(run("title", "the iPhone and NASA")).toBe("The iPhone and NASA");
+    expect(run("title", "iPhone tips")).toBe("iPhone Tips");
+  });
+
   it("sentence case capitalises sentence starts and the pronoun I", () => {
-    expect(run("sentence", "HELLO THERE. i think SO! what?\nnew line")).toBe(
+    expect(run("sentence", "HELLO THERE. I THINK SO! WHAT?\nnew line")).toBe(
       "Hello there. I think so! What?\nNew line",
     );
     expect(run("sentence", "it's mine, i'm sure")).toBe("It's mine, I'm sure");
+  });
+
+  it("sentence case keeps acronyms and does not split on abbreviations", () => {
+    expect(run("sentence", "I love NASA. Ok then")).toBe("I love NASA. Ok then");
+    expect(run("sentence", "see i.e. this. And e.g. that. i'm done")).toBe(
+      "See i.e. this. And e.g. that. I'm done",
+    );
+    expect(run("sentence", "iPhone sales. what")).toBe("iPhone sales. What");
   });
 
   it("converts to camel, snake and kebab case per line", () => {
@@ -31,6 +44,11 @@ describe("case transforms", () => {
     expect(run("kebab", text)).toBe(
       "hello-world-again\nparse-http-response-code\nalready-snake-case",
     );
+  });
+
+  it("keeps contractions as one word in identifiers", () => {
+    expect(run("camel", "don't stop")).toBe("dontStop");
+    expect(run("snake", "it’s fine")).toBe("its_fine");
   });
 });
 
@@ -59,12 +77,22 @@ describe("line transforms", () => {
     );
   });
 
+  it("keeps a final line break and puts blank lines last when sorting", () => {
+    expect(run("sort-lines", "b\na\n")).toBe("a\nb\n");
+    expect(run("sort-lines", "b\n\na")).toBe("a\nb\n");
+  });
+
   it("removes duplicate lines, keeping the first", () => {
     expect(run("dedupe-lines", "a\nb\na\nc\nb")).toBe("a\nb\nc");
   });
 
-  it("normalises Windows line endings", () => {
+  it("keeps blank lines and the final line break when removing duplicates", () => {
+    expect(run("dedupe-lines", "a\n\nb\n\nc\na\n")).toBe("a\n\nb\n\nc\n");
+  });
+
+  it("normalises Windows and old Mac line endings", () => {
     expect(run("trim-lines", "a \r\nb ")).toBe("a\nb");
+    expect(run("trim-lines", " a \r b ")).toBe("a\nb");
   });
 });
 

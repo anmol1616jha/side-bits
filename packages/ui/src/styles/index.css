@@ -85,6 +85,29 @@
     --color-success: #a6d5a6;
   }
 
+  /* Without JavaScript the theme script never runs, so follow the system setting. Keep in sync with the block above. */
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme]) {
+      color-scheme: dark;
+      --color-bg: #191a18;
+      --color-surface: #232522;
+      --color-surface-muted: #2e312c;
+      --color-text: #f5f1e8;
+      --color-text-muted: #c2c4bb;
+      --color-border: #4b4f47;
+      --color-accent: #f08a6c;
+      --color-accent-contrast: #251711;
+      --color-green: #a6c6a7;
+      --color-green-soft: #2b3a2e;
+      --color-yellow: #e9c75a;
+      --color-yellow-contrast: #20211f;
+      --color-focus: #8cc7ff;
+      --color-danger: #ff8d86;
+      --color-warning: #f2c46b;
+      --color-success: #a6d5a6;
+    }
+  }
+
   html {
     background-color: var(--color-bg);
     color: var(--color-text);

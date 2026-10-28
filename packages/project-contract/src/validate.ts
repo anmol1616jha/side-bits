@@ -42,6 +42,9 @@ function validateProject(project: ProjectMetadata, collectionSlugs: Set<string>)
   if (project.instructions.length === 0 || project.instructions.some(isBlank)) {
     errors.push(`${at}: needs at least one non-empty instruction.`);
   }
+  for (const step of findDuplicates(project.instructions)) {
+    errors.push(`${at}: duplicate instruction "${step}".`);
+  }
   if (!PROJECT_STATUSES.includes(project.status)) {
     errors.push(`${at}: unknown status "${project.status}".`);
   }
@@ -67,7 +70,9 @@ function validateProject(project: ProjectMetadata, collectionSlugs: Set<string>)
   if (project.updatedAt < project.createdAt) errors.push(`${at}: updatedAt is before createdAt.`);
 
   if (isBlank(project.preview.alt)) errors.push(`${at}: preview needs alt text.`);
-  if (project.preview.kind === "screenshot" && !project.preview.src?.startsWith("/")) {
+  // "//host/path" is protocol-relative, i.e. another site, not root-relative.
+  const src = project.preview.src;
+  if (project.preview.kind === "screenshot" && !(src?.startsWith("/") && !src.startsWith("//"))) {
     errors.push(`${at}: screenshot previews need a root-relative src.`);
   }
 

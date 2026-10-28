@@ -5,7 +5,8 @@ export type RepairKind =
   | "curly-quotes"
   | "unquoted-keys"
   | "python-literals"
-  | "raw-control-characters";
+  | "raw-control-characters"
+  | "unusual-whitespace";
 
 export const REPAIR_LABELS: Record<RepairKind, string> = {
   comments: "removed comments",
@@ -15,6 +16,7 @@ export const REPAIR_LABELS: Record<RepairKind, string> = {
   "unquoted-keys": "added quotes around property names",
   "python-literals": "changed True/False/None to true/false/null",
   "raw-control-characters": "escaped line breaks and tabs inside strings",
+  "unusual-whitespace": "replaced invisible characters and non-breaking spaces",
 };
 
 export interface RepairResult {
@@ -27,6 +29,9 @@ const PYTHON_LITERALS: Record<string, string> = { True: "true", False: "false", 
 const ESCAPED_CONTROL: Record<string, string> = { "\n": "\\n", "\r": "\\r", "\t": "\\t" };
 const IDENTIFIER_START = /[A-Za-z_$]/;
 const IDENTIFIER_PART = /[\w$]/;
+/** Byte order marks and zero-width characters, often pasted from spreadsheets and web pages. */
+const INVISIBLE = /[\uFEFF\u200B-\u200D\u2060]/;
+const JSON_WHITESPACE = /[ \t\n\r]/;
 
 /** Closing delimiters accepted for each opening quote. */
 const QUOTE_PAIRS: Record<string, { close: string[]; kind: RepairKind | null }> = {
@@ -42,10 +47,9 @@ const QUOTE_PAIRS: Record<string, { close: string[]; kind: RepairKind | null }> 
  * it is inside a string, so text inside strings is never rewritten except to
  * escape it correctly. The result still needs validating.
  */
-export function repairJson(input: string): RepairResult {
+export function repairJson(text: string): RepairResult {
   const repairs = new Set<RepairKind>();
   const out: string[] = [];
-  const text = input.replace(/^\uFEFF/, "");
   let index = 0;
 
   /** Index of the next character that is not whitespace or a comment. */
@@ -53,7 +57,7 @@ export function repairJson(input: string): RepairResult {
     let position = from;
     while (position < text.length) {
       const char = text[position]!;
-      if (/\s/.test(char)) {
+      if (/\s/.test(char) || INVISIBLE.test(char)) {
         position++;
       } else if (char === "/" && text[position + 1] === "/") {
         const end = text.indexOf("\n", position);
@@ -117,6 +121,14 @@ export function repairJson(input: string): RepairResult {
       }
       out.push(`"${content}"`);
       index = position + 1;
+      continue;
+    }
+
+    // Invisible characters and non-standard spaces between tokens (inside strings they are valid)
+    if (INVISIBLE.test(char) || (/\s/.test(char) && !JSON_WHITESPACE.test(char))) {
+      repairs.add("unusual-whitespace");
+      if (!INVISIBLE.test(char)) out.push(" ");
+      index++;
       continue;
     }
 

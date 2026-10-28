@@ -27,10 +27,18 @@ export function applyTheme(theme: Theme): void {
   document.documentElement.setAttribute(THEME_ATTRIBUTE, theme);
 }
 
-/** Persists only on an explicit user choice, as the spec requires. */
+/**
+ * Persists only on an explicit user choice, as the spec requires. Choosing the
+ * theme the system already uses forgets the stored choice, so toggling back
+ * returns to following the system.
+ */
 export function chooseTheme(theme: Theme): void {
   try {
-    window.localStorage.setItem(THEME_STORAGE_KEY, theme);
+    if (theme === resolveTheme(null, systemPrefersDark())) {
+      window.localStorage.removeItem(THEME_STORAGE_KEY);
+    } else {
+      window.localStorage.setItem(THEME_STORAGE_KEY, theme);
+    }
   } catch {
     // Storage can be blocked (private mode, policies); the choice still applies for this page.
   }

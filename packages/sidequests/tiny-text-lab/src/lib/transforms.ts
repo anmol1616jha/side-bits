@@ -9,41 +9,88 @@ export interface Transform {
   apply: (text: string) => string;
 }
 
-const LINE_BREAK = /\r?\n/;
+/** Windows (\r\n), Unix (\n) and old Mac (\r) line breaks. */
+const LINE_BREAK = /\r\n?|\n/;
 const WORD = /[\p{L}\p{N}][\p{L}\p{M}\p{N}'’]*/gu;
 
 const mapLines = (text: string, fn: (line: string) => string) =>
   text.split(LINE_BREAK).map(fn).join("\n");
 const capitalize = (word: string) => word.charAt(0).toUpperCase() + word.slice(1);
 
+/** Acronyms and names such as NASA, iPhone or JavaScript: a capital after the first letter. */
+const hasInnerCapital = (word: string) => /\p{Lu}/u.test(word.slice(1));
+
+/**
+ * Lowercases a line but keeps acronyms and names as written. A line with no
+ * lowercase letters at all is treated as shouting and lowercased entirely.
+ */
+function lowerKeepingNames(line: string): string {
+  if (!/\p{Ll}/u.test(line)) return line.toLowerCase();
+  return line.replace(WORD, (word) => (hasInnerCapital(word) ? word : word.toLowerCase()));
+}
+
+/** Abbreviations whose final dot does not end a sentence. */
+const ABBREVIATIONS = new Set([
+  "e.g",
+  "i.e",
+  "cf",
+  "vs",
+  "approx",
+  "mr",
+  "mrs",
+  "ms",
+  "dr",
+  "prof",
+]);
+
 function titleCase(text: string): string {
   return mapLines(text, (line) => {
     let index = 0;
-    return line.toLowerCase().replace(WORD, (word) => {
+    return lowerKeepingNames(line).replace(WORD, (word) => {
       const isFirst = index++ === 0;
+      if (hasInnerCapital(word)) return word;
       return !isFirst && TITLE_CASE_SMALL_WORDS.has(word) ? word : capitalize(word);
     });
   });
 }
 
 function sentenceCase(text: string): string {
-  return text
-    .toLowerCase()
+  return mapLines(text, lowerKeepingNames)
     .replace(
-      /(^|[.!?]\s+|\n\s*)(\p{L})/gu,
-      (_, before: string, letter: string) => before + letter.toUpperCase(),
+      /(^|[.!?]\s+|\n\s*)(\p{L}[\p{L}\p{M}\p{N}'’]*)/gu,
+      (match, before: string, word: string, offset: number, whole: string) => {
+        if (hasInnerCapital(word)) return match;
+        if (before.startsWith(".")) {
+          const previous = /[\p{L}.]+$/u.exec(whole.slice(0, offset))?.[0].toLowerCase();
+          if (previous && ABBREVIATIONS.has(previous)) return match;
+        }
+        return before + capitalize(word);
+      },
     )
-    .replace(/(^|\s)i(?=['’\s.,!?;:]|$)/g, "$1I");
+    .replace(/(^|\s)i(?=['’\s,!?;:)]|\.(?!\p{L})|$)/gu, "$1I");
+}
+
+/** Applies `fn` to the lines, keeping a final line break where it was. */
+function editLines(text: string, fn: (lines: string[]) => string[]): string {
+  const lines = text.split(LINE_BREAK);
+  const trailingBreak = lines.length > 1 && lines.at(-1) === "";
+  if (trailingBreak) lines.pop();
+  const result = fn(lines).join("\n");
+  return trailingBreak ? `${result}\n` : result;
 }
 
 /** Splits identifiers and phrases into lowercase words: "helloWorld-again" → hello, world, again. */
 function splitWords(line: string): string[] {
   return (
-    line
-      .replace(/(\p{Ll}|\p{N})(\p{Lu})/gu, "$1 $2")
-      .replace(/(\p{Lu})(\p{Lu}\p{Ll})/gu, "$1 $2")
-      .match(/[\p{L}\p{N}]+/gu) ?? []
-  ).map((word) => word.toLowerCase());
+    (
+      line
+        // "don't" is one word, not "don" and "t".
+        .replace(/(\p{L})['’](?=\p{L})/gu, "$1")
+        .replace(/(\p{Ll}|\p{N})(\p{Lu})/gu, "$1 $2")
+        .replace(/(\p{Lu})(\p{Lu}\p{Ll})/gu, "$1 $2")
+        .match(/[\p{L}\p{N}]+/gu) ?? []
+    ).map((word) => word.toLowerCase())
+  );
 }
 
 function joinWords(text: string, join: (words: string[]) => string): string {
@@ -119,14 +166,27 @@ export const TRANSFORMS: Transform[] = [
     group: "lines",
     apply: (text) => {
       const collator = new Intl.Collator(undefined, { numeric: true, sensitivity: "base" });
-      return text.split(LINE_BREAK).sort(collator.compare).join("\n");
+      // Blank lines go last rather than bunching up at the top.
+      return editLines(text, (lines) =>
+        lines.sort((a, b) => Number(isBlank(a)) - Number(isBlank(b)) || collator.compare(a, b)),
+      );
     },
   },
   {
     id: "dedupe-lines",
     label: "Remove duplicates",
     group: "lines",
-    apply: (text) => [...new Set(text.split(LINE_BREAK))].join("\n"),
+    // Blank lines are kept so paragraphs stay apart.
+    apply: (text) =>
+      editLines(text, (lines) => {
+        const seen = new Set<string>();
+        return lines.filter((line) => {
+          if (isBlank(line)) return true;
+          if (seen.has(line)) return false;
+          seen.add(line);
+          return true;
+        });
+      }),
   },
 ];
 

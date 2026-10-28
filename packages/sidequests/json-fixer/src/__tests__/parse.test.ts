@@ -77,6 +77,19 @@ describe("parseJson: errors", () => {
     expect(errorOf(text).message).toBe(message);
   });
 
+  it("names invisible characters instead of quoting them", () => {
+    expect(errorOf('\uFEFF{"a": 1}').message).toBe(
+      "Unexpected character an invisible byte order mark (U+FEFF).",
+    );
+    expect(errorOf('{\u00A0"a": 1}').message).toBe(
+      "Unexpected character a non-breaking space (U+00A0).",
+    );
+  });
+
+  it("reports early endings at the last content, not at trailing blank lines", () => {
+    expect(errorOf('{"a": 1\n\n')).toMatchObject({ line: 1, column: 8 });
+  });
+
   it("points at the unclosed container when input ends early", () => {
     expect(errorOf('{\n  "a": [1, 2').message).toBe(
       "Unexpected end of input: the array opened on line 2 is missing its closing “]”.",

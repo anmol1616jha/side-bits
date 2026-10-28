@@ -50,7 +50,7 @@ pnpm build
 pnpm start
 ```
 
-To build for a real domain, set `SITE_URL` first. It's used for canonical links, the sitemap and social previews. You can set it in your host's environment, or locally in `apps/web/.env.local` (copy `.env.example`; Next.js reads env files from the app folder, not the repository root):
+To build for a real domain, set `SITE_URL` first. It's used for canonical links, the sitemap and social previews. You can set it in your host's environment, or locally in `apps/web/.env.local` (copy `apps/web/.env.example`; Next.js reads env files from the app folder, not the repository root):
 
 ```sh
 SITE_URL=https://example.com pnpm build

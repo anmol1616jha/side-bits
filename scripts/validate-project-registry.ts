@@ -31,12 +31,19 @@ function readJson<T>(path: string): T {
   return JSON.parse(readFileSync(path, "utf8")) as T;
 }
 
+/** Source without comments, so a commented-out import doesn't count as registered. */
+function readCode(path: string): string {
+  return readFileSync(path, "utf8")
+    .replace(/\/\*[\s\S]*?\*\//g, "")
+    .replace(/^\s*\/\/.*$/gm, "");
+}
+
 const errors: string[] = [];
 const projects: ProjectMetadata[] = [];
 
 const webManifest = readJson<PackageManifest>(join(webDir, "package.json"));
-const registrySource = readFileSync(join(webDir, "src/lib/registry.ts"), "utf8");
-const appsSource = readFileSync(join(webDir, "src/lib/project-apps.ts"), "utf8");
+const registrySource = readCode(join(webDir, "src/lib/registry.ts"));
+const appsSource = readCode(join(webDir, "src/lib/project-apps.ts"));
 
 const folders = readdirSync(sidequestsDir, { withFileTypes: true })
   .filter((entry) => entry.isDirectory())

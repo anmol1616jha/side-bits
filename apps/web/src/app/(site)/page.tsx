@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Container, SectionHeading, buttonClasses } from "@side-bits/ui";
@@ -5,12 +6,19 @@ import { CollectionCard } from "@/components/collection-card";
 import { ProjectGrid } from "@/components/project-grid";
 import { ProjectPreview } from "@/components/project-preview";
 import { getCollections, getProjectsInCollection } from "@/lib/collections";
+import { defaultSocialImage, siteOpenGraph } from "@/lib/metadata";
 import {
   getEntry,
   getFeaturedProjects,
   getLatestProjects,
   getVisibleProjects,
 } from "@/lib/registry";
+
+// Keeps the layout's default title. Page-level openGraph replaces the layout's, so the image is listed again.
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+  openGraph: { ...siteOpenGraph, url: "/", images: [defaultSocialImage] },
+};
 
 const LATEST_LIMIT = 3;
 const HERO_PREVIEW_LIMIT = 4;

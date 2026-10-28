@@ -28,9 +28,11 @@ export function JsonFixerApp() {
   }
 
   function applyFix() {
-    if (analysis.state !== "invalid" || !analysis.fix) return;
+    // The shown analysis can lag behind typing; fix the text as it is now.
+    const latest = input === deferredInput ? analysis : analyzeJson(input, style);
+    if (latest.state !== "invalid" || !latest.fix) return;
     setBeforeFix(input);
-    setInput(analysis.fix.text);
+    setInput(latest.fix.text);
     setNotice("Fixes applied. The JSON is now valid.");
   }
 

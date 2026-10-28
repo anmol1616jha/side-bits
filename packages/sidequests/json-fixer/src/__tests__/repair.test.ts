@@ -37,6 +37,12 @@ describe("repairJson", () => {
     expect(JSON.parse(repaired('{"a": "line\none\there"}').text)).toEqual({ a: "line\none\there" });
   });
 
+  it("removes byte order marks and replaces non-breaking spaces between tokens", () => {
+    const result = repaired('\uFEFF{\u00A0"a":\u00A01,\u200B"b": "x\u00A0y"}');
+    expect(JSON.parse(result.text)).toEqual({ a: 1, b: "x\u00A0y" });
+    expect(result.repairs).toEqual(["unusual-whitespace"]);
+  });
+
   it("never rewrites text inside strings", () => {
     const text = '{"url": "http://example.com", "words": "True, None, a: b", "c": "x,]"}';
     const result = repairJson(text);

@@ -4,8 +4,6 @@ export { Badge } from "./components/badge/badge";
 export type { BadgeProps, BadgeTone } from "./components/badge/badge";
 export { Button, buttonClasses } from "./components/button/button";
 export type { ButtonProps, ButtonSize, ButtonVariant } from "./components/button/button";
-export { Card } from "./components/card/card";
-export type { CardProps } from "./components/card/card";
 export { Container } from "./components/container/container";
 export type { ContainerProps } from "./components/container/container";
 export { IconButton } from "./components/icon-button/icon-button";

@@ -33,6 +33,10 @@ function countWords(text: string): number {
   return text.match(/[\p{L}\p{N}]+(?:['’][\p{L}\p{N}]+)*/gu)?.length ?? 0;
 }
 
+const LINE_BREAK = /\r\n?|\n/;
+const TRAILING_LINE_BREAK = /(?:\r\n?|\n)$/;
+const PARAGRAPH_BREAK = /(?:\r\n?|\n)\s*(?:\r\n?|\n)/;
+
 export function computeStats(text: string): TextStats {
   const characters = graphemes(text);
   const words = countWords(text);
@@ -40,8 +44,9 @@ export function computeStats(text: string): TextStats {
     characters: characters.length,
     charactersWithoutSpaces: characters.filter((char) => !/^\s+$/u.test(char)).length,
     words,
-    lines: text === "" ? 0 : text.split(/\r?\n/).length,
-    paragraphs: text.split(/\r?\n\s*\r?\n/).filter((block) => block.trim() !== "").length,
+    // A final line break ends the last line; it doesn't start a new one.
+    lines: text === "" ? 0 : text.replace(TRAILING_LINE_BREAK, "").split(LINE_BREAK).length,
+    paragraphs: text.split(PARAGRAPH_BREAK).filter((block) => block.trim() !== "").length,
     readingMinutes: words / READING_WORDS_PER_MINUTE,
   };
 }

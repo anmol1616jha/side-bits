@@ -1,13 +1,10 @@
 import type { ReactNode } from "react";
 import { cx } from "../../lib/cx";
 
-export type BadgeTone = "neutral" | "accent" | "green" | "yellow" | "warning";
+export type BadgeTone = "neutral" | "warning";
 
 const tones: Record<BadgeTone, string> = {
   neutral: "border-border bg-surface-muted text-text",
-  accent: "border-accent text-accent bg-transparent",
-  green: "border-transparent bg-green-soft text-green",
-  yellow: "border-transparent bg-yellow text-yellow-contrast",
   warning: "border-warning text-warning bg-transparent",
 };
 

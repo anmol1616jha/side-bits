@@ -16,11 +16,19 @@ interface PageMetadataInput {
  * rather than merging, so pages must list it explicitly. Explicit images also
  * override opengraph-image files, so routes with their own file opt out.
  */
-const defaultSocialImage = {
+export const defaultSocialImage = {
   url: "/opengraph-image",
   ...socialImageSize,
   alt: `${siteConfig.name}: ${siteConfig.tagline}`,
 };
+
+/** Site-wide Open Graph fields. No `url`: pages set their own, so none inherits the homepage's. */
+export const siteOpenGraph = {
+  type: "website",
+  siteName: siteConfig.name,
+  title: siteConfig.name,
+  description: siteConfig.description,
+} as const;
 
 /** Title, description, canonical URL and social previews for one route. */
 export function pageMetadata({
@@ -36,8 +44,7 @@ export function pageMetadata({
     description,
     alternates: { canonical: path },
     openGraph: {
-      type: "website",
-      siteName: siteConfig.name,
+      ...siteOpenGraph,
       title,
       description,
       url: path,

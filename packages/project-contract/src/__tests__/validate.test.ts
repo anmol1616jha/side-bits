@@ -100,6 +100,26 @@ describe("validateRegistry", () => {
     );
   });
 
+  it("rejects duplicate instructions", () => {
+    const errors = validateRegistry(
+      [project({ instructions: ["Use it.", "Use it."] })],
+      collections,
+    );
+    expect(errors).toContain('Project "sample": duplicate instruction "Use it.".');
+  });
+
+  it("rejects protocol-relative screenshot sources", () => {
+    const errors = validateRegistry(
+      [
+        project({
+          preview: { kind: "screenshot", src: "//elsewhere.example/a.png", alt: "Shot." },
+        }),
+      ],
+      collections,
+    );
+    expect(errors).toContain('Project "sample": screenshot previews need a root-relative src.');
+  });
+
   it("requires a src for screenshot previews and https source links", () => {
     const errors = validateRegistry(
       [

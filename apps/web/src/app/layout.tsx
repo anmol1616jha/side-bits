@@ -5,6 +5,7 @@ import { SkipLink, themeInitScript } from "@side-bits/ui";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { siteConfig } from "@/config/site";
+import { siteOpenGraph } from "@/lib/metadata";
 import "./globals.css";
 
 const bodyFont = DM_Sans({ subsets: ["latin"], variable: "--font-body", display: "swap" });
@@ -23,15 +24,10 @@ export const metadata: Metadata = {
     template: `%s · ${siteConfig.name}`,
   },
   description: siteConfig.description,
-  openGraph: {
-    type: "website",
-    siteName: siteConfig.name,
-    title: siteConfig.name,
-    description: siteConfig.description,
-    url: "/",
-  },
+  // No canonical or og:url here: every page inherits the layout's metadata, and
+  // pointing them all at the homepage would hide them from search engines.
+  openGraph: siteOpenGraph,
   twitter: { card: "summary_large_image" },
-  alternates: { canonical: "/" },
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

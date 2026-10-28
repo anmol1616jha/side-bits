@@ -5,10 +5,29 @@
  */
 const DEVELOPMENT_URL = "http://localhost:3000";
 
-if (!process.env.SITE_URL && process.env.NODE_ENV === "production") {
-  console.warn(
-    `[site] SITE_URL is not set; canonical URLs, the sitemap and social previews will point at ${DEVELOPMENT_URL}.`,
-  );
+function readSiteUrl(): URL {
+  const value = process.env.SITE_URL?.trim();
+  if (!value) {
+    if (process.env.NODE_ENV === "production") {
+      console.warn(
+        `[site] SITE_URL is not set; canonical URLs, the sitemap and social previews will point at ${DEVELOPMENT_URL}.`,
+      );
+    }
+    return new URL(DEVELOPMENT_URL);
+  }
+
+  let url: URL | null = null;
+  try {
+    url = new URL(value);
+  } catch {
+    // Reported below.
+  }
+  if (!url || (url.protocol !== "https:" && url.protocol !== "http:")) {
+    throw new Error(
+      `[site] SITE_URL must be an absolute http(s) URL such as https://example.com; got "${value}".`,
+    );
+  }
+  return url;
 }
 
 export const siteConfig = {
@@ -16,6 +35,6 @@ export const siteConfig = {
   tagline: "Small projects. Side quests. Questionable priorities.",
   description:
     "A little corner of the internet for things that didn't need to exist: useful tools, odd experiments and tiny websites made because someone asked “what if?”",
-  url: new URL(process.env.SITE_URL || DEVELOPMENT_URL),
+  url: readSiteUrl(),
   author: { name: "Anmol Jha", url: "https://anmol1616jha.com/" },
 } as const;

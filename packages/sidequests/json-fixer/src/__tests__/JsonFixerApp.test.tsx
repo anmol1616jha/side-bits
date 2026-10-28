@@ -39,6 +39,12 @@ describe("JsonFixerApp", () => {
     );
   });
 
+  it("highlights the character where the error is", () => {
+    const { container } = render(<JsonFixerApp />);
+    fireEvent.change(input(), { target: { value: '["😀😀" x]' } });
+    expect(container.querySelector("pre span")!.textContent).toBe("x");
+  });
+
   it("applies and undoes automatic fixes", () => {
     render(<JsonFixerApp />);
     fireEvent.click(screen.getByRole("button", { name: "Load example" }));

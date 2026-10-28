@@ -82,4 +82,12 @@ describe("chooseTheme", () => {
     expect(document.documentElement.getAttribute("data-theme")).toBe("dark");
     expect(readStoredTheme()).toBe("dark");
   });
+
+  it("goes back to following the system when the choice matches it", () => {
+    mockSystemDark(false);
+    chooseTheme("dark");
+    chooseTheme("light");
+    expect(document.documentElement.getAttribute("data-theme")).toBe("light");
+    expect(window.localStorage.getItem(THEME_STORAGE_KEY)).toBeNull();
+  });
 });

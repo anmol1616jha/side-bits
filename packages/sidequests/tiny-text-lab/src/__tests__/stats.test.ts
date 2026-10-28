@@ -20,6 +20,12 @@ describe("computeStats", () => {
     expect(stats.paragraphs).toBe(2);
   });
 
+  it("does not count a final line break as an extra line", () => {
+    expect(computeStats("a\n").lines).toBe(1);
+    expect(computeStats("a\r\nb\r\n").lines).toBe(2);
+    expect(computeStats("\n").lines).toBe(1);
+  });
+
   it("counts user-perceived characters", () => {
     expect(computeStats("é👍🏽🇬🇧").characters).toBe(3);
     expect(computeStats("a b\tc\n").charactersWithoutSpaces).toBe(3);

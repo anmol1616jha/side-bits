@@ -61,6 +61,9 @@ export function ValidationStatus({ id, analysis, input, onApplyFix }: Validation
 
   const { error, fix } = analysis;
   const snippet = snippetAround(input, error.offset, ERROR_SNIPPET_RADIUS);
+  // Highlight the offending character rather than drawing a caret under it, which
+  // drifts out of line after emoji and wide characters.
+  const culprit = String.fromCodePoint(snippet.text.codePointAt(snippet.caret) ?? 0x20);
 
   return (
     <div className="space-y-3">
@@ -76,9 +79,11 @@ export function ValidationStatus({ id, analysis, input, onApplyFix }: Validation
         aria-hidden="true"
         className="overflow-x-auto rounded-sm bg-surface-muted px-3 py-2 font-mono text-sm leading-relaxed"
       >
-        {snippet.text || " "}
-        {"\n"}
-        <span className="text-danger">{`${" ".repeat(snippet.caret)}^`}</span>
+        {snippet.text.slice(0, snippet.caret)}
+        <span className="rounded-[2px] bg-danger text-surface underline decoration-2 underline-offset-2">
+          {/\s/.test(culprit) ? " " : culprit}
+        </span>
+        {snippet.text.slice(snippet.caret + culprit.length)}
       </pre>
       {fix ? (
         <div className="flex flex-col gap-3 rounded-sm border border-border bg-surface p-3 sm:flex-row sm:items-center sm:justify-between">
