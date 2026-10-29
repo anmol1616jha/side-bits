@@ -137,6 +137,26 @@ describe("RandomTopicGeneratorApp", () => {
     expect(timer().textContent).toBe("25:00");
   });
 
+  it("doesn't keep a topic that research hasn't started on after a reload", () => {
+    const { unmount } = render(<RandomTopicGeneratorApp />);
+    fireEvent.click(screen.getByRole("radio", { name: "Difficult" }));
+    fireEvent.click(screen.getByRole("radio", { name: "45 min" }));
+    fireEvent.click(button("Get a topic"));
+    const saved = JSON.parse(window.localStorage.getItem(STORAGE_KEY)!) as { topic: string };
+    unmount();
+
+    render(<RandomTopicGeneratorApp />);
+    expect(button("Get a topic")).toBeTruthy();
+    expect((screen.getByRole("radio", { name: "Difficult" }) as HTMLInputElement).checked).toBe(
+      true,
+    );
+    expect((screen.getByRole("radio", { name: "45 min" }) as HTMLInputElement).checked).toBe(true);
+
+    fireEvent.click(button("Get a topic"));
+    advance(1500);
+    expect(screen.queryByText(saved.topic)).toBeNull();
+  });
+
   it("starts fresh when the saved session is unreadable", () => {
     window.localStorage.setItem(STORAGE_KEY, '{"phase":"research"}');
     render(<RandomTopicGeneratorApp />);

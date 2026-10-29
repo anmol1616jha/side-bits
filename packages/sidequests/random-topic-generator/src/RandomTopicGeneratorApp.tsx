@@ -53,7 +53,11 @@ export function RandomTopicGeneratorApp() {
 
 function loadSession(): Session {
   try {
-    return parseSession(window.localStorage.getItem(STORAGE_KEY)) ?? initialSession;
+    const saved = parseSession(window.localStorage.getItem(STORAGE_KEY));
+    if (!saved) return initialSession;
+    // A topic you haven't started researching isn't kept: a reload means a fresh pick.
+    // It stays in `recent`, so the next roll won't hand it straight back.
+    return saved.phase === "setup" ? { ...saved, topic: null } : saved;
   } catch {
     return initialSession;
   }
@@ -128,7 +132,10 @@ function TopicSession() {
           ? "Research time is up. You can start the test."
           : "Time's up. The test is over.",
       );
-      if (soundOn) getChime().play();
+      if (soundOn) {
+        if (session.phase === "research") getChime().alarm();
+        else getChime().play();
+      }
     }
     const id = window.setInterval(tick, TICK_INTERVAL_MS);
     // Background tabs throttle timers; catch up as soon as the tab is visible again.
