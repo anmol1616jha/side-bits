@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+import { brandColors } from "@/lib/brand-colors";
 
 export const size = { width: 180, height: 180 };
 export const contentType = "image/png";
@@ -12,7 +13,7 @@ export default function AppleIcon() {
         height: "100%",
         display: "flex",
         position: "relative",
-        backgroundColor: "#b83f25",
+        backgroundColor: brandColors.accent,
       }}
     >
       <div
@@ -23,7 +24,7 @@ export default function AppleIcon() {
           width: 62,
           height: 62,
           borderRadius: 14,
-          backgroundColor: "#f5f1e8",
+          backgroundColor: brandColors.bg,
         }}
       />
       <div
@@ -34,7 +35,7 @@ export default function AppleIcon() {
           width: 51,
           height: 51,
           borderRadius: 11,
-          backgroundColor: "#e9c75a",
+          backgroundColor: brandColors.yellow,
         }}
       />
     </div>,

@@ -23,9 +23,9 @@ export function MainNav({ items, className }: { items: NavigationItem[]; classNa
                 href={item.href}
                 aria-current={current ? "page" : undefined}
                 className={cx(
-                  "inline-flex min-h-11 items-center rounded-sm px-3 font-medium transition-colors duration-(--motion-fast)",
+                  "inline-flex min-h-11 items-center rounded-sm px-3 hud-label text-sm transition-colors duration-(--motion-fast)",
                   current
-                    ? "text-text underline decoration-accent decoration-2 underline-offset-8"
+                    ? "text-accent underline decoration-accent decoration-2 underline-offset-8"
                     : "text-text-muted hover:text-text",
                 )}
               >

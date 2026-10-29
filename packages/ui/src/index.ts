@@ -1,4 +1,5 @@
 export { cx } from "./lib/cx";
+export { cardClasses } from "./lib/card";
 
 export { Badge } from "./components/badge/badge";
 export type { BadgeProps, BadgeTone } from "./components/badge/badge";

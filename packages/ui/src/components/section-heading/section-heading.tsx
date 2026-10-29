@@ -32,7 +32,7 @@ export function SectionHeading({
   return (
     <div className={cx("flex flex-wrap items-end justify-between gap-4", className)}>
       <div className="max-w-reading">
-        {eyebrow ? <p className="mb-2 text-sm font-medium text-accent">{eyebrow}</p> : null}
+        {eyebrow ? <p className="mb-2 hud-label text-meta text-accent">{eyebrow}</p> : null}
         <Heading
           id={id}
           className={cx("font-display font-semibold tracking-tight", titleSizes[level])}

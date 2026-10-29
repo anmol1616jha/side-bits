@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import { DM_Sans, Space_Grotesk } from "next/font/google";
+import { Geist, Geist_Mono, Oxanium } from "next/font/google";
 import { SkipLink, themeInitScript } from "@side-bits/ui";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
@@ -8,12 +8,13 @@ import { siteConfig } from "@/config/site";
 import { siteOpenGraph } from "@/lib/metadata";
 import "./globals.css";
 
-const bodyFont = DM_Sans({ subsets: ["latin"], variable: "--font-body", display: "swap" });
-const headingFont = Space_Grotesk({
+const bodyFont = Geist({ subsets: ["latin"], variable: "--font-body", display: "swap" });
+const headingFont = Oxanium({
   subsets: ["latin"],
   variable: "--font-heading",
   display: "swap",
 });
+const codeFont = Geist_Mono({ subsets: ["latin"], variable: "--font-code", display: "swap" });
 
 const MAIN_CONTENT_ID = "main-content";
 
@@ -35,7 +36,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     // The theme script sets data-theme before hydration, so the server markup differs on purpose.
     <html
       lang="en"
-      className={`${bodyFont.variable} ${headingFont.variable}`}
+      className={`${bodyFont.variable} ${headingFont.variable} ${codeFont.variable}`}
       suppressHydrationWarning
     >
       <head>

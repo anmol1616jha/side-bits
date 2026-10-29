@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { cardClasses } from "@side-bits/ui";
 import type { CollectionDefinition, ProjectMetadata } from "@side-bits/project-contract";
 import { collectionPath } from "@/lib/collections";
 
@@ -14,8 +15,8 @@ export function CollectionCard({ collection, projects, headingLevel = 3 }: Colle
   const count = `${projects.length} ${projects.length === 1 ? "project" : "projects"}`;
 
   return (
-    <article className="group relative flex h-full flex-col rounded-md border border-border bg-surface p-6 transition-colors duration-(--motion-base) hover:border-text-muted has-[a:focus-visible]:outline-2 has-[a:focus-visible]:outline-offset-2 has-[a:focus-visible]:outline-focus">
-      <p className="text-meta font-medium text-text-muted">{count}</p>
+    <article className={cardClasses("p-6")}>
+      <p className="hud-label text-meta text-text-muted">{count}</p>
       <Heading className="mt-1 font-display text-display-md font-semibold tracking-tight">
         <Link
           href={collectionPath(collection.slug)}
@@ -30,7 +31,7 @@ export function CollectionCard({ collection, projects, headingLevel = 3 }: Colle
       </p>
       <span
         aria-hidden="true"
-        className="mt-auto inline-flex items-center gap-1 pt-4 text-sm font-medium text-accent"
+        className="mt-auto inline-flex items-center gap-1 pt-4 hud-label text-meta text-accent"
       >
         Browse collection
         <ArrowRight

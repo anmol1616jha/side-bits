@@ -40,7 +40,8 @@ export default function HomePage() {
     <>
       <Container className="grid items-center gap-12 py-12 sm:py-20 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]">
         <div>
-          <p className="mb-4 text-sm font-medium text-accent">
+          <p className="mb-4 hud-label text-meta text-accent">
+            <span aria-hidden="true">{"// "}</span>
             Small projects. Side quests. Questionable priorities.
           </p>
           <h1 className="font-display text-display-xl font-semibold tracking-tight">
@@ -64,7 +65,7 @@ export default function HomePage() {
           {heroEntries.map((entry, index) => (
             <div
               key={entry.metadata.slug}
-              className={`aspect-video overflow-hidden rounded-md border border-border bg-surface ${
+              className={`hud-frame aspect-video overflow-hidden rounded-md border border-border bg-surface shadow-[0_0_40px_-16px_var(--color-accent)] ${
                 index % 2 === 1 ? "translate-y-6" : ""
               }`}
             >
@@ -78,12 +79,13 @@ export default function HomePage() {
         <Container as="section" aria-labelledby="featured-heading" className="py-10">
           <SectionHeading
             id="featured-heading"
+            eyebrow="Sector 01"
             title="Start here"
             description="The ones most likely to be worth your three minutes."
             action={
               <Link
                 href="/explore"
-                className="inline-flex min-h-11 items-center gap-1 font-medium text-accent underline-offset-4 hover:underline"
+                className="inline-flex min-h-11 items-center gap-1 hud-label text-sm text-accent underline-offset-4 hover:underline"
               >
                 See everything
                 <ArrowRight aria-hidden="true" className="size-4" strokeWidth={2} />
@@ -98,7 +100,7 @@ export default function HomePage() {
 
       {latest.length > 0 ? (
         <Container as="section" aria-labelledby="latest-heading" className="py-10">
-          <SectionHeading id="latest-heading" title="Freshly assembled" />
+          <SectionHeading id="latest-heading" eyebrow="Sector 02" title="Freshly assembled" />
           <div className="mt-8">
             <ProjectGrid projects={latest} />
           </div>
@@ -108,6 +110,7 @@ export default function HomePage() {
       <Container as="section" aria-labelledby="collections-heading" className="py-10">
         <SectionHeading
           id="collections-heading"
+          eyebrow="Sector 03"
           title="Collections"
           description="Loosely curated, strictly optional."
         />

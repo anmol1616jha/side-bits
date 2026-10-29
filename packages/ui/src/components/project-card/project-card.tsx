@@ -1,6 +1,6 @@
 import type { ComponentType, ReactNode } from "react";
 import { ArrowRight } from "lucide-react";
-import { cx } from "../../lib/cx";
+import { cardClasses } from "../../lib/card";
 
 export interface LinkLikeProps {
   href: string;
@@ -53,14 +53,7 @@ export function ProjectCard({
   const visibleTags = tags.slice(0, maxTags);
 
   return (
-    <article
-      className={cx(
-        "group relative flex h-full flex-col overflow-hidden rounded-md border border-border bg-surface",
-        "transition-colors duration-(--motion-base) hover:border-text-muted",
-        "has-[a:focus-visible]:outline-2 has-[a:focus-visible]:outline-offset-2 has-[a:focus-visible]:outline-focus",
-        className,
-      )}
-    >
+    <article className={cardClasses("overflow-hidden", className)}>
       <div className="aspect-video overflow-hidden border-b border-border bg-surface-muted">
         {preview}
       </div>
@@ -81,7 +74,7 @@ export function ProjectCard({
               {visibleTags.map((tag) => (
                 <li
                   key={tag}
-                  className="rounded-sm bg-surface-muted px-2 py-0.5 text-meta text-text-muted"
+                  className="rounded-sm bg-surface-muted px-2 py-0.5 font-mono text-meta text-text-muted"
                 >
                   {tag}
                 </li>
@@ -92,7 +85,7 @@ export function ProjectCard({
           )}
           <span
             aria-hidden="true"
-            className="inline-flex items-center gap-1 text-sm font-medium text-accent"
+            className="inline-flex items-center gap-1 hud-label text-meta text-accent"
           >
             Open
             <ArrowRight
