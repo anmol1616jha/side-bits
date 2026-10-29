@@ -4,6 +4,7 @@ import { useEffect, useReducer, useRef, useState, useSyncExternalStore } from "r
 import { Volume2, VolumeX } from "lucide-react";
 import { Button } from "@side-bits/ui";
 import { PhaseSteps } from "./components/PhaseSteps";
+import { useTopicShuffle } from "./hooks/useTopicShuffle";
 import {
   ReadyPanel,
   ResearchPanel,
@@ -18,6 +19,7 @@ import { formatClock } from "./lib/format";
 import {
   initialSession,
   parseSession,
+  researchDurationLabel,
   researchRemainingMs,
   sessionReducer,
   testRemainingMs,
@@ -86,6 +88,7 @@ function TopicSession() {
   const chime = useRef<Chime | null>(null);
   const heading = useRef<HTMLHeadingElement>(null);
   const shownPhase = useRef<Phase>(session.phase);
+  const shuffle = useTopicShuffle();
 
   function getChime(): Chime {
     chime.current ??= createChime();
@@ -102,7 +105,9 @@ function TopicSession() {
 
   function roll() {
     const exclude = session.topic ? [session.topic, ...session.recent] : session.recent;
-    dispatch({ type: "showTopic", topic: pickTopic(session.difficulty, exclude) });
+    const topic = pickTopic(session.difficulty, exclude);
+    dispatch({ type: "showTopic", topic });
+    shuffle.start(session.difficulty, topic);
     setAnnouncement("New topic ready.");
   }
 
@@ -171,13 +176,13 @@ function TopicSession() {
   return (
     <section
       aria-labelledby="topic-session-heading"
-      className="space-y-6 rounded-md border border-border bg-surface p-5 sm:p-8"
+      className="hud-frame space-y-8 overflow-hidden rounded-md border border-border bg-surface p-5 sm:p-8"
     >
       <h2 id="topic-session-heading" className="sr-only">
         Topic session
       </h2>
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <PhaseSteps phase={session.phase} />
+      <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3">
+        <PhaseSteps phase={session.phase} className="min-w-[16rem] flex-1" />
         <Button
           variant="ghost"
           size="sm"
@@ -196,88 +201,94 @@ function TopicSession() {
         </Button>
       </div>
 
-      {session.phase === "setup" ? (
-        <SetupPanel
-          session={session}
-          headingRef={heading}
-          onDifficulty={(difficulty) => dispatch({ type: "setDifficulty", difficulty })}
-          onMinutes={(minutes) => dispatch({ type: "setResearchMinutes", minutes })}
-          onRoll={roll}
-          onStart={() => {
-            if (soundOn) getChime().unlock();
-            act(
-              (time) => ({ type: "startResearch", now: time }),
-              `Research started. ${session.researchMinutes} minutes on the clock.`,
-            );
-          }}
-        />
-      ) : null}
+      {/* A fresh wrapper per step, so each step slides in as it appears. */}
+      <div
+        key={session.phase}
+        className="transition-[opacity,translate] duration-300 ease-out starting:translate-y-3 starting:opacity-0"
+      >
+        {session.phase === "setup" ? (
+          <SetupPanel
+            session={session}
+            shuffleFrame={shuffle.frame}
+            headingRef={heading}
+            onDifficulty={(difficulty) => dispatch({ type: "setDifficulty", difficulty })}
+            onMinutes={(minutes) => dispatch({ type: "setResearchMinutes", minutes })}
+            onRoll={roll}
+            onStart={() => {
+              if (soundOn) getChime().unlock();
+              act(
+                (time) => ({ type: "startResearch", now: time }),
+                `Research started. ${researchDurationLabel(session)} on the clock.`,
+              );
+            }}
+          />
+        ) : null}
 
-      {session.phase === "research" ? (
-        <ResearchPanel
-          session={session}
-          now={now}
-          headingRef={heading}
-          onBreak={() =>
-            act((time) => ({ type: "startBreak", now: time }), "On a break. The clock is paused.")
-          }
-          onResume={() =>
-            act((time) => ({ type: "endBreak", now: time }), "Break over. Research resumed.")
-          }
-          onFinishEarly={() =>
-            act(
-              (time) => ({ type: "finishResearch", now: time }),
-              "Research finished. You can start the test.",
-            )
-          }
-          onGiveUp={() => {
-            dispatch({ type: "reset" });
-            setAnnouncement("Topic dropped. Pick your next challenge.");
-          }}
-        />
-      ) : null}
+        {session.phase === "research" ? (
+          <ResearchPanel
+            session={session}
+            now={now}
+            headingRef={heading}
+            onBreak={() =>
+              act((time) => ({ type: "startBreak", now: time }), "On a break. The clock is paused.")
+            }
+            onResume={() =>
+              act((time) => ({ type: "endBreak", now: time }), "Break over. Research resumed.")
+            }
+            onFinishEarly={() =>
+              act(
+                (time) => ({ type: "finishResearch", now: time }),
+                "Research finished. You can start the test.",
+              )
+            }
+            onGiveUp={() => {
+              dispatch({ type: "reset" });
+              setAnnouncement("Topic dropped. Pick your next challenge.");
+            }}
+          />
+        ) : null}
 
-      {session.phase === "ready" ? (
-        <ReadyPanel
-          session={session}
-          headingRef={heading}
-          onStartTest={() => {
-            if (soundOn) getChime().unlock();
-            act(
-              (time) => ({ type: "startTest", now: time }),
-              "Test started. Speak about the topic for one minute.",
-            );
-          }}
-        />
-      ) : null}
+        {session.phase === "ready" ? (
+          <ReadyPanel
+            session={session}
+            headingRef={heading}
+            onStartTest={() => {
+              if (soundOn) getChime().unlock();
+              act(
+                (time) => ({ type: "startTest", now: time }),
+                "Test started. Speak about the topic for one minute.",
+              );
+            }}
+          />
+        ) : null}
 
-      {session.phase === "test" ? (
-        <TestPanel
-          session={session}
-          now={now}
-          headingRef={heading}
-          onStop={() => act((time) => ({ type: "finishTest", now: time }), "Test stopped.")}
-        />
-      ) : null}
+        {session.phase === "test" ? (
+          <TestPanel
+            session={session}
+            now={now}
+            headingRef={heading}
+            onStop={() => act((time) => ({ type: "finishTest", now: time }), "Test stopped.")}
+          />
+        ) : null}
 
-      {session.phase === "done" ? (
-        <SummaryPanel
-          session={session}
-          headingRef={heading}
-          onNewTopic={() => {
-            dispatch({ type: "reset" });
-            dispatch({
-              type: "showTopic",
-              topic: pickTopic(session.difficulty, [session.topic!, ...session.recent]),
-            });
-            setAnnouncement("New topic ready.");
-          }}
-          onChangeSettings={() => {
-            dispatch({ type: "reset" });
-            setAnnouncement("Pick your next challenge.");
-          }}
-        />
-      ) : null}
+        {session.phase === "done" ? (
+          <SummaryPanel
+            session={session}
+            headingRef={heading}
+            onNewTopic={() => {
+              const topic = pickTopic(session.difficulty, [session.topic!, ...session.recent]);
+              dispatch({ type: "reset" });
+              dispatch({ type: "showTopic", topic });
+              shuffle.start(session.difficulty, topic);
+              setAnnouncement("New topic ready.");
+            }}
+            onChangeSettings={() => {
+              dispatch({ type: "reset" });
+              setAnnouncement("Pick your next challenge.");
+            }}
+          />
+        ) : null}
+      </div>
 
       <p role="status" className="sr-only">
         {announcement}

@@ -27,6 +27,7 @@ pnpm --filter @side-bits/sidequest-random-topic-generator typecheck
 - `src/lib/session.ts`: the session as a pure reducer: setup → research (with breaks) → ready → test → done. Times are wall-clock timestamps rather than tick counts, so the clock stays right in a throttled background tab and after a reload. `parseSession` validates a saved session and discards anything inconsistent.
 - `src/RandomTopicGeneratorApp.tsx`: ticks the visible clock every 250 ms while a countdown is on screen, ends a countdown when it runs out, saves the session to `localStorage`, shows the time left in the tab title and plays the chime.
 - `src/lib/chime.ts`: a two-note chime made with Web Audio (no sound file). Audio is unlocked by the Start buttons, since browsers block sound that isn't started by a click. It can be switched off.
+- `src/components/`: the look. `looks.ts` sets each difficulty's colour (Easy green, Medium cyan, Difficult yellow) and the option-card icons; `Countdown` is the ring clock (cyan, then yellow for the last tenth, red for the last few seconds); `useTopicShuffle` plays the slot-machine reveal. All motion is skipped when the visitor prefers reduced motion, and the decorative parts are hidden from screen readers.
 - Breaks pause the research clock with no time limit. "I'm ready" ends research early; "Give up" drops the topic. Both ask for confirmation.
 - Screen readers hear the moments that matter (start, break, time's up) through one polite live region, not every second of the countdown. Focus moves to the new step's heading when the step changes.
 

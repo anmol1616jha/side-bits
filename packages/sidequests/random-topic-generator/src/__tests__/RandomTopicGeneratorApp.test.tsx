@@ -37,9 +37,32 @@ describe("RandomTopicGeneratorApp", () => {
     fireEvent.click(button("Get a topic"));
     const shownTopic = () =>
       screen.getByText((text) => TOPICS.difficult.includes(text)).textContent;
+    advance(1500); // Let the shuffle land.
     const first = shownTopic();
     fireEvent.click(button("New topic"));
+    advance(1500);
     expect(shownTopic()).not.toBe(first);
+  });
+
+  it("keeps the real topic available to screen readers while the shuffle plays", () => {
+    render(<RandomTopicGeneratorApp />);
+    fireEvent.click(button("Get a topic"));
+    const saved = JSON.parse(window.localStorage.getItem(STORAGE_KEY)!) as { topic: string };
+    const real = screen.getByText(saved.topic);
+    expect(real.closest("[aria-hidden]")).toBeNull();
+    advance(1500);
+    expect(screen.getAllByText((text) => TOPICS.easy.includes(text))).toHaveLength(1);
+  });
+
+  it("offers a 10-second research time for trying the flow quickly", () => {
+    render(<RandomTopicGeneratorApp />);
+    fireEvent.click(screen.getByRole("radio", { name: "10 sec" }));
+    fireEvent.click(button("Get a topic"));
+    fireEvent.click(button("Start research"));
+    expect(timer().textContent).toBe("0:10");
+
+    advance(10_000);
+    expect(button("Start the 1-minute test")).toBeTruthy();
   });
 
   it("counts down research and unlocks the test when time is up", () => {
