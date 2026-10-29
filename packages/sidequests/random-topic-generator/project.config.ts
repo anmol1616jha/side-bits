@@ -13,6 +13,7 @@ const metadata = {
     "Start research. Use Break to pause the clock and Resume to carry on.",
     "When the research countdown ends, start the test and speak about the topic for one minute.",
   ],
+  featured: true,
   dataHandling:
     "Everything runs in your browser. Your current session is saved in this browser so a refresh doesn't lose it; nothing is sent anywhere and nothing is recorded.",
   tags: ["learning", "speaking", "timer", "practice"],

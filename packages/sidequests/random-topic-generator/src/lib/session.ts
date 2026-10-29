@@ -3,8 +3,6 @@ import { isDifficulty, isKnownTopic } from "./topics";
 import type { Difficulty } from "./topics";
 
 export const RESEARCH_DURATIONS = [
-  // TEMPORARY, for trying the flow quickly in development. Remove before production.
-  { value: "10s", label: "10 sec", ms: 10_000 },
   { value: "30", label: "30 min", ms: 30 * 60_000 },
   { value: "45", label: "45 min", ms: 45 * 60_000 },
   { value: "60", label: "60 min", ms: 60 * 60_000 },
@@ -91,7 +89,7 @@ export function researchDurationMs(session: Session): number {
   return researchDuration(session.researchMinutes).ms;
 }
 
-/** "30 min", or "10 sec" for the development shortcut. */
+/** E.g. "30 min". */
 export function researchDurationLabel(session: Session): string {
   return researchDuration(session.researchMinutes).label;
 }

@@ -120,7 +120,7 @@ export function SetupPanel({
         options={DURATION_OPTIONS}
         value={session.researchMinutes}
         onChange={onMinutes}
-        className="grid-cols-2 sm:grid-cols-4"
+        className="grid-cols-3"
       />
 
       {session.topic ? (

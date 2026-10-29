@@ -17,7 +17,7 @@ const metadata = {
   tags: ["json", "formatter", "developer-tools"],
   collectionSlugs: ["actually-useful"],
   status: "live",
-  featured: true,
+  featured: false,
   createdAt: "2026-10-27",
   updatedAt: "2026-10-27",
   preview: {

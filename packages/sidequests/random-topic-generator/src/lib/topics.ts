@@ -61,7 +61,7 @@ export const TOPICS: Record<Difficulty, readonly string[]> = {
     "Endowment Effect",
     "Loss Aversion",
     "Choice Overload",
-    "Hedonic Adaptation"
+    "Hedonic Adaptation",
   ],
   medium: [
     "Simulation Hypothesis",
@@ -113,7 +113,7 @@ export const TOPICS: Record<Difficulty, readonly string[]> = {
     "Comparative Advantage",
     "Dutch Disease",
     "Public Goods Problem",
-    "Anthropic Principle"
+    "Anthropic Principle",
   ],
   difficult: [
     "Gödel's Incompleteness Theorems",
@@ -166,8 +166,8 @@ export const TOPICS: Record<Difficulty, readonly string[]> = {
     "Anthropic Reasoning",
     "Hard Problem of Free Will",
     "Evolutionary Game Theory",
-    "Landauer's Principle"
-  ]
+    "Landauer's Principle",
+  ],
 };
 
 export function isDifficulty(value: unknown): value is Difficulty {

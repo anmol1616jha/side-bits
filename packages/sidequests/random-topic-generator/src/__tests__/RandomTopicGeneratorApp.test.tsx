@@ -54,17 +54,6 @@ describe("RandomTopicGeneratorApp", () => {
     expect(screen.getAllByText((text) => TOPICS.easy.includes(text))).toHaveLength(1);
   });
 
-  it("offers a 10-second research time for trying the flow quickly", () => {
-    render(<RandomTopicGeneratorApp />);
-    fireEvent.click(screen.getByRole("radio", { name: "10 sec" }));
-    fireEvent.click(button("Get a topic"));
-    fireEvent.click(button("Start research"));
-    expect(timer().textContent).toBe("0:10");
-
-    advance(10_000);
-    expect(button("Start the 1-minute test")).toBeTruthy();
-  });
-
   it("counts down research and unlocks the test when time is up", () => {
     render(<RandomTopicGeneratorApp />);
     fireEvent.click(screen.getByRole("radio", { name: "45 min" }));

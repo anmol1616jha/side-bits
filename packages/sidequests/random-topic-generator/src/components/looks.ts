@@ -1,4 +1,4 @@
-import { BookOpen, Cog, Flame, Hourglass, Sprout, Telescope, Zap } from "lucide-react";
+import { BookOpen, Cog, Flame, Hourglass, Sprout, Telescope } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import type { ResearchMinutes } from "../lib/session";
 import type { Difficulty } from "../lib/topics";
@@ -58,7 +58,6 @@ export const DIFFICULTY_LOOKS: Record<
 };
 
 export const DURATION_LOOKS: Record<ResearchMinutes, { icon: LucideIcon; description: string }> = {
-  "10s": { icon: Zap, description: "Dev shortcut" },
   "30": { icon: Hourglass, description: "Quick dig" },
   "45": { icon: BookOpen, description: "Solid read" },
   "60": { icon: Telescope, description: "Deep dive" },
