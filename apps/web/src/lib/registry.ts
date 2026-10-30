@@ -1,6 +1,8 @@
 import type { ComponentType } from "react";
 import { validateRegistry } from "@side-bits/project-contract";
 import type { ProjectMetadata } from "@side-bits/project-contract";
+import diceRoller from "@side-bits/sidequest-dice-roller/project.config";
+import { DiceRollerPreview } from "@side-bits/sidequest-dice-roller/preview";
 import jsonFixer from "@side-bits/sidequest-json-fixer/project.config";
 import { JsonFixerPreview } from "@side-bits/sidequest-json-fixer/preview";
 import randomTopicGenerator from "@side-bits/sidequest-random-topic-generator/project.config";
@@ -36,6 +38,10 @@ const entries: RegistryEntry[] = [
   {
     metadata: randomTopicGenerator,
     Preview: RandomTopicGeneratorPreview,
+  },
+  {
+    metadata: diceRoller,
+    Preview: DiceRollerPreview,
   },
 ];
 

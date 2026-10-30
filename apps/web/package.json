@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@side-bits/project-contract": "workspace:*",
+    "@side-bits/sidequest-dice-roller": "workspace:*",
     "@side-bits/sidequest-json-fixer": "workspace:*",
     "@side-bits/sidequest-random-topic-generator": "workspace:*",
     "@side-bits/sidequest-tiny-text-lab": "workspace:*",

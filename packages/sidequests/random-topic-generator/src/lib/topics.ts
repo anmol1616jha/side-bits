@@ -27,7 +27,6 @@ export const TOPICS: Record<Difficulty, readonly string[]> = {
     "Déjà Vu",
     "Supply and Demand",
     "Social Contract",
-    "Fermi Paradox",
     "Nature vs. Nurture",
     "Impostor Syndrome",
     "Halo Effect",
@@ -65,7 +64,6 @@ export const TOPICS: Record<Difficulty, readonly string[]> = {
   ],
   medium: [
     "Simulation Hypothesis",
-    "Prisoner's Dilemma",
     "Broken Windows Theory",
     "Observer Effect",
     "Singularity Hypothesis",

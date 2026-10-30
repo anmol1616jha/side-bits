@@ -11,6 +11,7 @@ import type { ComponentType } from "react";
  * project grows heavy, lazy-load its heavy part inside that project instead.
  */
 export const projectAppLoaders: Record<string, () => Promise<ComponentType>> = {
+  "dice-roller": () => import("@side-bits/sidequest-dice-roller").then((m) => m.DiceRollerApp),
   "json-fixer": () => import("@side-bits/sidequest-json-fixer").then((m) => m.JsonFixerApp),
   "random-topic-generator": () =>
     import("@side-bits/sidequest-random-topic-generator").then((m) => m.RandomTopicGeneratorApp),

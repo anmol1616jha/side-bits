@@ -13,4 +13,9 @@ export const collections: CollectionDefinition[] = [
     title: "Brain gym",
     description: "Little workouts for thinking, remembering and talking on your feet.",
   },
+  {
+    slug: "just-for-fun",
+    title: "Just for fun",
+    description: "Toys with no purpose beyond the next click.",
+  },
 ];
