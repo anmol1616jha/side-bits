@@ -1,0 +1,1 @@
+export { WordGeneratorApp } from "./WordGeneratorApp";

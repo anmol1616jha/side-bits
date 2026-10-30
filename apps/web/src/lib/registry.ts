@@ -9,6 +9,8 @@ import randomTopicGenerator from "@side-bits/sidequest-random-topic-generator/pr
 import { RandomTopicGeneratorPreview } from "@side-bits/sidequest-random-topic-generator/preview";
 import tinyTextLab from "@side-bits/sidequest-tiny-text-lab/project.config";
 import { TinyTextLabPreview } from "@side-bits/sidequest-tiny-text-lab/preview";
+import wordGenerator from "@side-bits/sidequest-word-generator/project.config";
+import { WordGeneratorPreview } from "@side-bits/sidequest-word-generator/preview";
 import { collections } from "@/content/collections";
 
 export interface RegistryEntry {
@@ -42,6 +44,10 @@ const entries: RegistryEntry[] = [
   {
     metadata: diceRoller,
     Preview: DiceRollerPreview,
+  },
+  {
+    metadata: wordGenerator,
+    Preview: WordGeneratorPreview,
   },
 ];
 

@@ -16,6 +16,8 @@ export const projectAppLoaders: Record<string, () => Promise<ComponentType>> = {
   "random-topic-generator": () =>
     import("@side-bits/sidequest-random-topic-generator").then((m) => m.RandomTopicGeneratorApp),
   "tiny-text-lab": () => import("@side-bits/sidequest-tiny-text-lab").then((m) => m.TinyTextLabApp),
+  "word-generator": () =>
+    import("@side-bits/sidequest-word-generator").then((m) => m.WordGeneratorApp),
 };
 
 export function loadProjectApp(slug: string): Promise<ComponentType> {
